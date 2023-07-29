@@ -1,0 +1,9 @@
+---
+const { date } = Astro.props;
+
+import { DateTime } from 'luxon';
+
+const displayDate = DateTime.fromJSDate(date, {zone:'UTC'}).toLocaleString(DateTime.DATE_FULL);
+---
+
+<time datetime={date.toISOString()}>{displayDate}</time>

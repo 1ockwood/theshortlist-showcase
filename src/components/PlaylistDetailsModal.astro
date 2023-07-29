@@ -1,0 +1,183 @@
+---
+import { getHighestContrastColor } from '@util/colors.mjs';
+
+import PlaylistCover from '@components/PlaylistCover.astro';
+import TimeTag from '@components/TimeTag.astro';
+import Icon from '@components/Icon.astro';
+import Button from '@components/Button.astro';
+
+const { playlist } = Astro.props;
+---
+
+<dialog class="playlist-details-modal" id={`playlist-details-${playlist.id}`} data-playlist-id={playlist.id} data-release={playlist.release.number}>
+  <div class="contents">
+    <button type="button" class="dialog-close-btn" title="Close Details">Close <span class="sr">Details Modal</span> <Icon filename="x" /></button>
+    <header>
+      <h3 class="title">Release #{playlist.release.number}</h3>
+      <p class="info">Released {playlist.release.date ? <TimeTag date={new Date(playlist.release.date)} /> : 'This Week' }</p>
+    </header>
+    <div class="actions">
+      <Button href={playlist.url}><Icon filename="spotify" /> Open on Spotify</Button>
+      <Button href={`?release=${playlist.release.number}`} class="playlist-share-button"><Icon filename="share" /> Share</Button>
+    </div>
+    <Icon filename="waveline" />
+    <PlaylistCover releaseNum={playlist.release.number} playlistImg={playlist.image} />
+    <Icon filename="waveline" />
+    <h4>Preview</h4>
+    <div class="spotify-embed" data-uri={playlist.uri}><Icon filename="loader" /></div>
+  </div>
+</dialog>
+
+<script>
+const playlistDetailsModals = document.querySelectorAll('.playlist-details-modal');
+// add click event listener to all details modals to handle closing them
+playlistDetailsModals.forEach(modal => {
+  const closeButton = modal.querySelector('.dialog-close-btn');
+  closeButton.addEventListener('click', () => {
+    modal.close();
+  });
+});
+// TODO
+// share functionality
+</script>
+
+<style lang="scss">
+@use "../styles/utilities" as utils;
+
+@keyframes dialogIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10%);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+dialog {
+  --shadowColor: color-mix(in srgb, var(--primaryColor) 86%, #000);
+  position: fixed;
+  background: none;
+  border: 0;
+  padding: 3% 5%;
+  margin: 0;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  color: var(--secondaryColor);
+  box-sizing: border-box;
+
+  &::backdrop {
+    background-color: rgba(8, 8, 8, 0.79);
+  }
+}
+
+.contents {
+  position: relative;
+  background: var(--primaryColor);
+  padding: 1.5rem 1.5rem 1.25rem;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  max-width: 33rem;
+  margin: 0 auto;
+  box-shadow: 0 0 6rem rgba(0, 0, 0, 0.86);
+  text-align: center;
+
+  dialog[open] & {
+    animation: dialogIn 1s ease-in-out;
+  }
+
+  :global(.playlist-cover) {
+    margin: 1.5rem auto;
+    animation: floatingInSpace 18s linear infinite;
+    box-shadow: 0 0 3rem var(--shadowColor);
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  & > :global(svg) {
+    font-size: 1.5em;
+    margin: 0.25em 0;
+    opacity: 0.25;
+  }
+
+  @media (min-width: utils.$helper-bp-small) {
+    padding: 2.5rem 2.5rem 2.25rem;
+  }
+}
+
+.dialog-close-btn {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border-radius: 1em;
+
+  :global(svg) {
+    transition: transform 0.3s utils.$transition-in-out-cubic;
+  }
+
+  &:hover {
+    :global(svg) {
+      transform: scale(1.25);
+      transition-duration: 0.1s;
+    }
+  }
+
+  :global(.sr) {
+    @include utils.helper-visually-hidden();
+  }
+}
+
+header {
+  h3 {
+    font-family: utils.$font-unbounded;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.125em;
+    font-weight: 800;
+    margin: 1.25em 0 0.5em;
+  }
+
+  p {
+    font-size: 1.125em;
+    line-height: 1.5em;
+  }
+}
+
+.actions {
+  margin: 0 0 2em;
+
+  a,
+  button {
+    margin: 1em 0 0;
+  }
+}
+
+h4 {
+  font-family: utils.$font-unbounded;
+  font-size: 1.5em;
+  line-height: 1.125em;
+  font-weight: 800;
+  margin: 1em 0;
+}
+
+.spotify-embed {
+  & > :global(svg) {
+    font-size: 2rem;
+  }
+
+  dialog[open] & > :global(svg) {
+    animation: spin 1s utils.$transition-in-out-cubic infinite;
+  }
+}
+</style>

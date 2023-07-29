@@ -1,0 +1,21 @@
+// basic font stacks
+$serif: Georgia, Cambria, "Times New Roman", Times, serif;
+$sans: system-ui, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+$monospace: SFMono-Regular, Consolas, Menlo, monospace;
+
+// custom font stacks
+$unbounded: Unbounded, $sans;
+$plex-mono: "IBM Plex Mono", $monospace;
+
+// font weights
+$weight-regular: 400;
+$weight-medium: 500;
+$weight-bold: 700;
+
+// reset font styles
+@mixin reset() {
+  font-size: 1rem;
+  line-height: 1em;
+  font-weight: normal;
+  letter-spacing: normal;
+}

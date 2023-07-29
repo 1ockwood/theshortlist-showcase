@@ -1,0 +1,67 @@
+@use "webfonts";
+@use "utilities" as utils;
+
+// import normalize (via postcss-normalize)
+// https://github.com/csstools/postcss-normalize
+@import-normalize;
+
+$perspective: 1000px;
+
+@keyframes floatingInSpace {
+  0% {
+    transform: perspective($perspective) rotateX(5deg) rotateY(0deg) translateY(0);
+  }
+  12.5% {
+    transform: perspective($perspective) rotateX(3deg) rotateY(3deg) translateY(-0.25rem);
+  }
+  25% {
+    transform: perspective($perspective) rotateX(0deg) rotateY(5deg) translateY(-0.5rem);
+  }
+  37.5% {
+    transform: perspective($perspective) rotateX(-3deg) rotateY(3deg) translateY(-0.25rem);
+  }
+  50% {
+    transform: perspective($perspective) rotateX(-5deg) rotateY(0deg) translateY(0);
+  }
+  62.5% {
+    transform: perspective($perspective) rotateX(-3deg) rotateY(-3deg) translateY(0.25rem);
+  }
+  75% {
+    transform: perspective($perspective) rotateX(0deg) rotateY(-5deg) translateY(0.5rem);
+  }
+  87.5% {
+    transform: perspective($perspective) rotateX(3deg) rotateY(-3deg) translateY(0.25rem);
+  }
+  100% {
+    transform: perspective($perspective) rotateX(5deg) rotateY(0deg) translateY(0);
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 0.125em dashed var(--secondaryColor);
+}
+
+:root {
+  --shadowColor: color-mix(in srgb, var(--primaryColor) 86%, #000);
+}
+
+body {
+  background-color: var(--primaryColor);
+  font-family: utils.$font-plex-mono;
+  font-size: 1em;
+  line-height: 1.5em;
+  font-weight: 500;
+  color: var(--secondaryColor);
+  padding: 0;
+  margin: 0;
+}

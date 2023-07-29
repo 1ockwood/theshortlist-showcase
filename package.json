@@ -1,0 +1,31 @@
+{
+  "name": "theshortlist-showcase",
+  "description": "Showcase website for The Short List.",
+  "author": "Craig Lockwood",
+  "version": "1.0.0",
+  "type": "module",
+  "browserslist": "defaults",
+  "scripts": {
+    "setup:icons": "svgo -f public/icons --config svgo.config.icons.cjs",
+    "sync": "node spotifySync.js",
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "npm run sync && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^2.9.6",
+    "autoprefixer": "^10.4.14",
+    "colorthief": "^2.4.0",
+    "dotenv": "^16.3.1",
+    "entities": "^4.5.0",
+    "image-size": "^1.0.2",
+    "luxon": "^3.3.0",
+    "plaiceholder": "^3.0.0",
+    "postcss-normalize": "^10.0.1",
+    "rimraf": "^5.0.1",
+    "sass": "^1.64.1",
+    "sharp": "^0.32.4"
+  }
+}

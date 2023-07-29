@@ -1,0 +1,102 @@
+---
+import '@styles/global.scss';
+import { getHighestContrastColor } from '@util/colors.mjs';
+import { imageDimensions } from '@util/helpers.mjs';
+
+const { title = 'The Short List', description = '', colors} = Astro.props;
+const { href } = Astro.url
+
+const socialImage = '/social-card-default.png';
+const primaryColor = colors.primary;
+const palette = colors.palette;
+const secondaryColor = getHighestContrastColor(primaryColor, palette);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>{title}</title>
+    <meta name="description" content={description}>
+    <link rel="canonical" href={href}>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/tsl.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#080808">
+    <meta name="apple-mobile-web-app-title" content="The Short List">
+    <meta name="application-name" content="The Short List">
+    <meta name="msapplication-TileColor" content="#080808">
+    <meta name="theme-color" content="#080808">
+
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={href}>
+    <meta property="og:type" content="website">
+    <meta property="og:image" content={import.meta.env.SITE_URL + socialImage}>
+    <meta property="og:image:width" content={imageDimensions(socialImage).width?.toString()}>
+    <meta property="og:image:height" content={imageDimensions(socialImage).height?.toString()}>
+    <meta name="twitter:card" content="summary_large_image">
+
+    <script src="https://open.spotify.com/embed-podcast/iframe-api/v1" async></script>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+
+<script>
+// handle opening playlist details modal
+window.openDetailsModal = (playlistId) => {
+  const detailsModal = document.querySelector(`#playlist-details-${playlistId}`);
+  const releaseNumber = detailsModal.dataset.release;
+  const spotifyEmbed = detailsModal.querySelector('.spotify-embed');
+  // close other modal if open
+  if (document.querySelector('[id^="playlist-details-"][open]')) document.querySelector('[id^="playlist-details-"][open]').close();
+  // update history state
+  history.replaceState({playlistId}, '', `/?release=${releaseNumber}`);
+  // show the modal
+  detailsModal.showModal();
+  // add event listener for dialog `close` event
+  detailsModal.addEventListener('close', closeDetailsModal);
+  // update site title
+  document.title = `The Short List | Release #${releaseNumber}`;
+  // initialize spotify embed within modal
+  if (spotifyEmbed) {
+    const spotifyEmbedOptions = {
+      uri: spotifyEmbed.dataset.uri,
+      height: 875
+    };
+    window.SpotifyIframeApi.createController(spotifyEmbed, spotifyEmbedOptions, (EmbedController) => {});
+  }
+}
+
+// handle closing playlist details modal
+window.closeDetailsModal = (event) => {
+  // reset history state
+  history.replaceState({playlistId: null}, '', '/');
+  // reset site title
+  document.title = 'The Short List';
+  // remove event listener for dialog `close` event
+  event.target.removeEventListener('close', closeDetailsModal);
+}
+
+// show details modal on load if `release` URL param exists
+window.addEventListener('load', () => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const releaseNumber = searchParams.get('release');
+  if (releaseNumber) {
+    const detailsModal = document.querySelector(`[id^="playlist-details-"][data-release="${releaseNumber}"]`);
+    const playlistId = detailsModal.dataset.playlistId;
+    openDetailsModal(playlistId);
+  }
+});
+</script>
+
+<style lang="scss" define:vars={{
+  primaryColor: `rgb(${primaryColor[0]}, ${primaryColor[1]}, ${primaryColor[2]})`,
+  secondaryColor: `rgb(${secondaryColor[0]}, ${secondaryColor[1]}, ${secondaryColor[2]})`
+}}>
+</style>

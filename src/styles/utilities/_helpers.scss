@@ -1,0 +1,79 @@
+// Breakpoints
+$bp-x-small: 26.625em;
+$bp-small: 34.375em;
+$bp-medium: 48.0625em;
+$bp-large: 75.25em;
+$bp-x-large: 90.0625em;
+
+// Screenreader Text
+@mixin visually-hidden($focusable: "false") {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+
+  @if $focusable == "true" {
+    &:focus,
+    &:active {
+      clip: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      position: static;
+      white-space: inherit;
+      width: auto;
+    }
+  }
+}
+
+// Width Wrap
+@mixin width-wrap($size: "large") {
+  box-sizing: border-box;
+  margin-right: 0.625rem;
+  margin-left: 0.625rem;
+
+  @if $size == "xlarge" {
+    max-width: 86.0625rem;
+
+    @media (min-width: $bp-small) {
+      margin-right: 1.5rem;
+      margin-left: 1.5rem;
+    }
+
+    @media (min-width: $bp-x-large) {
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+  @if $size == "large" {
+    max-width: 71.25rem;
+
+    @media (min-width: $bp-small) {
+      margin-right: 1.5rem;
+      margin-left: 1.5rem;
+    }
+
+    @media (min-width: $bp-large) {
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+  @else if $size == "medium" {
+    max-width: 43.75rem;
+
+    @media (min-width: $bp-small) {
+      margin-right: 1.5rem;
+      margin-left: 1.5rem;
+    }
+
+    @media (min-width: $bp-medium) {
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+}

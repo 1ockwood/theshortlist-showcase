@@ -1,0 +1,63 @@
+---
+const { ...attrs } = Astro.props;
+
+const isLink = (attrs.href) ? true : false;
+---
+
+{isLink ?
+<a class:list={['button', attrs.class]} {...attrs}>
+  <slot />
+</a>
+:
+<button class:list={['button', attrs.class]} {...attrs}>
+  <slot />
+</button>
+}
+
+<style lang="scss">
+@use "../styles/utilities" as utils;
+
+.button {
+  cursor: pointer;
+  background: transparent;
+  border: 0.125rem solid var(--accentColor, var(--secondaryColor));
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.25em;
+  text-transform: inherit;
+  text-decoration: none;
+  color: var(--accentColor, var(--secondaryColor));
+  display: inline-block;
+  padding: 0.3125em 0.8125em 0.1875em 0.5em;
+  transition: all 0.3s utils.$transition-in-out-cubic;
+  border-radius: 1em;
+  outline: none;
+
+  &:focus-visible,
+  &:hover {
+    background-color: var(--accentColor, var(--secondaryColor));
+    color: var(--bgColor, var(--primaryColor));
+    transition-duration: 0.1s;
+  }
+
+  &:not(:disabled):active {
+    transform: translateY(0.125rem);
+    transition-duration: 0.1s;
+  }
+
+  &:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+  }
+
+  :global(svg) {
+    height: 1.3125em;
+    transform: translateY(-0.0625rem);
+  }
+
+  :global(.sr) {
+    @include utils.helper-visually-hidden();
+  }
+}
+</style>

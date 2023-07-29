@@ -1,0 +1,52 @@
+---
+const { playlistImg, releaseNum } = Astro.props;
+
+const primaryColor = playlistImg.colors.primary;
+---
+
+<figure class="playlist-cover">
+  <img src={playlistImg.src} alt={`Cover image for release #${releaseNum}`} width={playlistImg.metadata.width} height={playlistImg.metadata.height} loading="lazy" />
+</figure>
+
+<style lang="scss" define:vars={{
+  backgroundColor: `rgb(${primaryColor[0]}, ${primaryColor[1]}, ${primaryColor[2]})`,
+  backgroundImage: playlistImg.placeholder.css.backgroundImage,
+  backgroundPosition: playlistImg.placeholder.css.backgroundPosition,
+  backgroundSize: playlistImg.placeholder.css.backgroundSize,
+  backgroundRepeat: playlistImg.placeholder.css.backgroundRepeat
+}}>
+@use "../styles/utilities" as utils;
+
+.playlist-cover {
+  width: 100%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+
+  &::before {
+    content: "";
+    background-color: var(--backgroundColor);
+    background-image: var(--backgroundImage);
+    background-position: var(--backgroundPosition);
+    background-size: var(--backgroundSize);
+    background-repeat: var(--backgroundRepeat);
+    filter: blur(2rem);
+    transform: scale(1.25);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    opacity: 1;
+    transition: all 0.3s utils.$transition-in-out-cubic;
+  }
+}
+</style>

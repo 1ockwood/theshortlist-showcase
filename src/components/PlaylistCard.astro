@@ -1,0 +1,87 @@
+---
+import { getHighestContrastColor } from '@util/colors.mjs';
+
+import PlaylistCover from '@components/PlaylistCover.astro';
+import PlaylistDetailsModal from '@components/PlaylistDetailsModal.astro';
+import Button from '@components/Button.astro';
+import Icon from '@components/Icon.astro';
+
+const { playlist } = Astro.props;
+
+const colors = playlist.image.colors;
+const palette = colors.palette;
+const primaryColor = colors.primary;
+const secondaryColor = getHighestContrastColor(primaryColor, palette);
+---
+
+<article class="playlist-card" id={`playlist-card-${playlist.id}`} data-playlist-id={playlist.id} data-release={playlist.release.number}>
+  <PlaylistCover releaseNum={playlist.release.number} playlistImg={playlist.image} />
+  <div class="content">
+    <h3 class="title">Release #{playlist.release.number}</h3>
+    <Button class="details-btn"><Icon filename="info" /> <Fragment set:html={`View Details <span class="sr">for Release #${playlist.release.number}</span>`} /></Button>
+  </div>
+  <PlaylistDetailsModal playlist={playlist} />
+</article>
+
+<script>
+const detailsButtons = document.querySelectorAll('.details-btn');
+// add click event listener to each playlist card to handle opening details modal
+detailsButtons.forEach(button => {
+  const playlistCard = button.closest('.playlist-card');
+  const playlistId = playlistCard.dataset.playlistId;
+  button.addEventListener('click', () => {
+    openDetailsModal(playlistId);
+  });
+})
+</script>
+
+<style lang="scss" define:vars={{
+  primaryColor: `rgb(${primaryColor[0]}, ${primaryColor[1]}, ${primaryColor[2]})`,
+  secondaryColor: `rgb(${secondaryColor[0]}, ${secondaryColor[1]}, ${secondaryColor[2]})`
+}}>
+@use "../styles/utilities" as utils;
+
+.playlist-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.2s utils.$transition-in-out-cubic;
+
+  &:has(.content button:hover),
+  &:has(.content button:focus-visible) {
+    :global(img) {
+      opacity: 0;
+    }
+  }
+}
+
+.content {
+  background: var(--secondaryColor);
+  padding: 1.25em 0.5em 1.5em;
+  text-align: center;
+  border-radius: 0 0 0.25rem 0.25rem;
+  margin-top: -0.0625em;
+  transform-style: preserve-3d;
+
+  :global(.button) {
+    --accentColor: var(--primaryColor);
+    --bgColor: var(--secondaryColor);
+    font-size: 1.125em;
+    transform: translateZ(1.5rem);
+
+    span {
+      @include utils.helper-visually-hidden();
+    }
+  }
+}
+
+.title {
+  display: block;
+  position: relative;
+  font-size: 1.25rem;
+  line-height: 1.125em;
+  font-weight: 500;
+  color: var(--primaryColor);
+  margin: 0 0 0.75em;
+  transform: translateZ(1.5rem);
+}
+</style>

@@ -1,0 +1,30 @@
+---
+import PlaylistCard from '@components/PlaylistCard.astro';
+
+const { playlist } = Astro.props;
+---
+
+<article id="featured-playlist">
+  <PlaylistCard playlist={playlist} />
+</article>
+
+<style lang="scss">
+article {
+  max-width: 31.25rem;
+  margin: 1.5rem auto;
+
+  :global(.playlist-card) {
+    animation: floatingInSpace 18s linear infinite;
+    animation-play-state: running;
+    box-shadow: 0 0 3rem var(--shadowColor);
+
+    &:hover {
+      animation-play-state: paused;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+}
+</style>
