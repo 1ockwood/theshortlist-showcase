@@ -5,6 +5,7 @@ import { decodeHTML } from 'entities';
 import Layout from '@layouts/Layout.astro';
 import FeaturedPlaylist from '@components/FeaturedPlaylist.astro';
 import PlaylistGrid from '@components/PlaylistGrid.astro';
+import PlaylistDetailsModal from '@components/PlaylistDetailsModal.astro';
 import Icon from '@components/Icon.astro';
 import Button from '@components/Button.astro';
 
@@ -15,7 +16,7 @@ playlists.sort(function(a, b) {
   return b.data.release.number - a.data.release.number;
 });
 // get latest releast
-const latestRelease = playlists.shift();
+const latestRelease = playlists[0];
 // get and  description from latest release, decode to account for HTML entities
 const description = decodeHTML(latestRelease.data.description);
 ---
@@ -35,7 +36,6 @@ const description = decodeHTML(latestRelease.data.description);
         <Icon filename="waveline" />
         <h2>Latest Release</h2>
       </header>
-      <div id="embed-test"></div>
       <FeaturedPlaylist playlist={latestRelease.data} />
     </section>
 
@@ -44,9 +44,13 @@ const description = decodeHTML(latestRelease.data.description);
         <Icon filename="waveline" />
         <h2>Past Releases</h2>
       </header>
-      <PlaylistGrid playlists={playlists} />
+      <PlaylistGrid playlists={playlists.slice(1)} />
     </section>
 	</main>
+
+  {playlists.map((playlist) =>
+    <PlaylistDetailsModal playlist={playlist.data} />
+  )}
 </Layout>
 
 <style lang="scss">

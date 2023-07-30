@@ -2,7 +2,6 @@
 import { getHighestContrastColor } from '@util/colors.mjs';
 
 import PlaylistCover from '@components/PlaylistCover.astro';
-import PlaylistDetailsModal from '@components/PlaylistDetailsModal.astro';
 import Button from '@components/Button.astro';
 import Icon from '@components/Icon.astro';
 
@@ -20,7 +19,6 @@ const secondaryColor = getHighestContrastColor(primaryColor, palette);
     <h3 class="title">Release #{playlist.release.number}</h3>
     <Button class="details-btn"><Icon filename="info" /> <Fragment set:html={`View Details <span class="sr">for Release #${playlist.release.number}</span>`} /></Button>
   </div>
-  <PlaylistDetailsModal playlist={playlist} />
 </article>
 
 <script>
