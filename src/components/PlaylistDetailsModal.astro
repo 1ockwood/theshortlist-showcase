@@ -51,7 +51,7 @@ playlistDetailsModals.forEach(modal => {
     event.preventDefault();
     // setup share data
     const shareData = {
-      title: 'The Short List',
+      title: `The Short List - Release ${modal.dataset.release}`,
       text: `Check out The Short List Release #${modal.dataset.release}`,
       url: shareButton.href,
     };
@@ -114,9 +114,11 @@ dialog {
   max-height: 100%;
   color: var(--secondaryColor);
   box-sizing: border-box;
+  transform: translateZ(10rem); // fix clipping/stacking issues from items beneath dialog in certain browsers
 
   &::backdrop {
     background-color: rgba(8, 8, 8, 0.79);
+    transform: translateZ(10rem); // fix clipping/stacking issues from items beneath dialog in certain browsers
   }
 }
 
