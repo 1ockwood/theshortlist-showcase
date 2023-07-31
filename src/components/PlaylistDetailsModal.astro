@@ -35,6 +35,7 @@ const secondaryColor = getHighestContrastColor(primaryColor, palette);
 </dialog>
 
 <script>
+import copyTextToClipboard from 'copy-text-to-clipboard';
 const playlistDetailsModals = document.querySelectorAll('.playlist-details-modal');
 // details modals functionality
 playlistDetailsModals.forEach(modal => {
@@ -61,12 +62,8 @@ playlistDetailsModals.forEach(modal => {
       .catch((error) => console.log(error));
     } else {
       // copy url to clipboard
-      // set up data to copy
-      const type = 'text/plain';
-      const blob = new Blob([shareData.url], { type });
-      const data = [new ClipboardItem({ [type]: blob })];
-      navigator.clipboard.write(data)
-      .then(() => {
+      const copyToClipboard = copyTextToClipboard(shareData.url, { target: modal });
+      if (copyToClipboard) {
         const buttonText = shareButton.querySelector('span');
         const buttonTextDefault = buttonText.textContent;
         // change button text for feedback
@@ -75,8 +72,7 @@ playlistDetailsModals.forEach(modal => {
         setTimeout(() => {
           buttonText.textContent = buttonTextDefault;
         }, 3000);
-      })
-      .catch((error) => console.log(error));
+      }
     }
   });
 });

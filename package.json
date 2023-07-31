@@ -18,6 +18,7 @@
     "astro": "^2.9.6",
     "autoprefixer": "^10.4.14",
     "colorthief": "^2.4.0",
+    "copy-text-to-clipboard": "^3.2.0",
     "dialog-polyfill": "^0.5.6",
     "dotenv": "^16.3.1",
     "entities": "^4.5.0",
