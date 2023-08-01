@@ -67,7 +67,7 @@ window.openDetailsModal = (playlistId) => {
   if (spotifyEmbed) {
     const spotifyEmbedOptions = {
       uri: spotifyEmbed.dataset.uri,
-      height: 875
+      height: 890
     };
     window.SpotifyIframeApi.createController(spotifyEmbed, spotifyEmbedOptions, (EmbedController) => {});
   }
