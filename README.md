@@ -2,6 +2,8 @@
 
 A fan-made showcase website for The Short List weekly Spotify playlist. Built with [Astro](https://astro.build).
 
+Check it out at [theshortlist-showcase.pages.dev](https://theshortlist-showcase.pages.dev/).
+
 ## Commands
 
 All commands are run from the root of the project:
