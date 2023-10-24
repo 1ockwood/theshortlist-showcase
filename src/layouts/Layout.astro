@@ -39,8 +39,6 @@ const secondaryColor = getHighestContrastColor(primaryColor, palette);
     <meta property="og:image:width" content={imageDimensions(socialImage).width?.toString()}>
     <meta property="og:image:height" content={imageDimensions(socialImage).height?.toString()}>
     <meta name="twitter:card" content="summary_large_image">
-
-    <script src="https://open.spotify.com/embed-podcast/iframe-api/v1" async></script>
 	</head>
 	<body>
 		<slot />
@@ -52,7 +50,6 @@ const secondaryColor = getHighestContrastColor(primaryColor, palette);
 window.openDetailsModal = (playlistId) => {
   const detailsModal = document.querySelector(`#playlist-details-${playlistId}`);
   const releaseNumber = detailsModal.dataset.release;
-  const spotifyEmbed = detailsModal.querySelector('.spotify-embed');
   // close other modal if open
   if (document.querySelector('[id^="playlist-details-"][open]')) document.querySelector('[id^="playlist-details-"][open]').close();
   // update history state
@@ -63,14 +60,6 @@ window.openDetailsModal = (playlistId) => {
   detailsModal.addEventListener('close', closeDetailsModal);
   // update site title
   document.title = `The Short List | Release #${releaseNumber}`;
-  // initialize spotify embed within modal
-  if (spotifyEmbed) {
-    const spotifyEmbedOptions = {
-      uri: spotifyEmbed.dataset.uri,
-      height: 890
-    };
-    window.SpotifyIframeApi.createController(spotifyEmbed, spotifyEmbedOptions, (EmbedController) => {});
-  }
 }
 
 // handle closing playlist details modal

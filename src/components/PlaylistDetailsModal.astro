@@ -30,7 +30,7 @@ const secondaryColor = getHighestContrastColor(primaryColor, palette);
     <PlaylistCover releaseNum={playlist.release.number} playlistImg={playlist.image} />
     <Icon filename="waveline" />
     <h4>Preview</h4>
-    <div class="spotify-embed" data-uri={playlist.uri}><Icon filename="loader" /></div>
+    <Fragment set:html={playlist.oembed.html} />
   </div>
 </dialog>
 
@@ -129,6 +129,10 @@ dialog {
   box-shadow: 0 0 6rem rgba(0, 0, 0, 0.86);
   text-align: center;
 
+  :global(iframe) {
+    height: 890px;
+  }
+
   dialog[open] & {
     animation: dialogIn 1s ease-in-out;
   }
@@ -211,15 +215,5 @@ h4 {
   line-height: 1.125em;
   font-weight: 800;
   margin: 1em 0;
-}
-
-.spotify-embed {
-  & > :global(svg) {
-    font-size: 2rem;
-  }
-
-  dialog[open] & > :global(svg) {
-    animation: spin 1s utils.$transition-in-out-cubic infinite;
-  }
 }
 </style>
