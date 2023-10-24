@@ -88,6 +88,7 @@ async function processPlaylists(playlists) {
   for (const playlist of playlists) {
     // store plalist cover locally
     const coverImageData = await storePlaylistCover(playlist.images[0].url, playlist.id);
+    // get oEmbed data from api to store with playlist data
     const oembedData = await getSpotifyOembedData(playlist.external_urls.spotify);
     // regex for parsing release info from playlist name
     const nameRegex = playlist.name.match(/(TSL|BDP|BPD)(\d+)(?:.*?(\d{4}-\d{1,2}-\d{1,2}))?/);
