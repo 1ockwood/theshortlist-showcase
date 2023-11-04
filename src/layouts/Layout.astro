@@ -50,6 +50,7 @@ const secondaryColor = getHighestContrastColor(primaryColor, palette);
 window.openDetailsModal = (playlistId) => {
   const detailsModal = document.querySelector(`#playlist-details-${playlistId}`);
   const releaseNumber = detailsModal.dataset.release;
+  const spotifyEmbed = detailsModal.querySelector('.spotify-embed');
   // close other modal if open
   if (document.querySelector('[id^="playlist-details-"][open]')) document.querySelector('[id^="playlist-details-"][open]').close();
   // update history state
@@ -60,6 +61,23 @@ window.openDetailsModal = (playlistId) => {
   detailsModal.addEventListener('close', closeDetailsModal);
   // update site title
   document.title = `The Short List | Release #${releaseNumber}`;
+  // initialize spotify embed within modal
+  if (spotifyEmbed) {
+    // return if embed has already been initialized
+    if (spotifyEmbed.getAttribute('data-init')) return;
+    // create embed element
+    const spotifyEmbedEl = document.createElement('iframe');
+    // set up embed element attributes
+    spotifyEmbedEl.src = spotifyEmbed.dataset.embedSrc;
+    spotifyEmbedEl.title = `Spotify Preview for The Short List Release #${releaseNumber}`;
+    spotifyEmbedEl.width = '100%';
+    spotifyEmbedEl.height = '890';
+    spotifyEmbedEl.setAttribute('frameborder', '0');
+    // append embed element to embed container
+    spotifyEmbed.appendChild(spotifyEmbedEl);
+    // mark embed as initialized to prevent further runs
+    spotifyEmbed.setAttribute('data-init', 'true');
+  }
 }
 
 // handle closing playlist details modal
