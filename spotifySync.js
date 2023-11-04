@@ -67,11 +67,29 @@ async function getSpotifyData(queryUrl, spotifyData = []) {
   .catch(error => { throw error });
 }
 
+// fetch oEmbed data from spotify api
+async function getSpotifyOembedData(playlistUrl) {
+  return await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(playlistUrl)}`, {
+    method: 'GET',
+    headers: new Headers({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    return data;
+  })
+  .catch(error => { throw error });
+}
+
 // handle playlist processing
 async function processPlaylists(playlists) {
   for (const playlist of playlists) {
     // store plalist cover locally
     const coverImageData = await storePlaylistCover(playlist.images[0].url, playlist.id);
+    // get oEmbed data from api to store with playlist data
+    const oembedData = await getSpotifyOembedData(playlist.external_urls.spotify);
     // regex for parsing release info from playlist name
     const nameRegex = playlist.name.match(/(TSL|BDP|BPD)(\d+)(?:.*?(\d{4}-\d{1,2}-\d{1,2}))?/);
     // set up playlist data to be stored locally
@@ -93,6 +111,7 @@ async function processPlaylists(playlists) {
         colors: coverImageData.colors
       },
       owner: playlist.owner,
+      oembed: oembedData,
     }
     // write file to astro content collection
     const dataFilePath = path.join(path.resolve(), 'src', 'content', 'playlists', `${playlist.id}.json`);
